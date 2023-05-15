@@ -21,9 +21,9 @@ export async function insertNewGame(req, res) {
             VALUES ($1, $2, $3, $4)
         `, [name, image, stockTotal, pricePerDay]);
 
-        const nameExist = await db.query(`SELECT * FROM games WHERE name=$1`
-        , [name]);
-        if(nameExist.rows[0]) return res.sendStatus(409);
+        // const nameExist = await db.query(`SELECT * FROM games WHERE name=$1`
+        // , [name]);
+        // if(nameExist.rows[0]) return res.sendStatus(409);
 
         return res.status(201).json({ games: game.rows });
     } catch (err) {
