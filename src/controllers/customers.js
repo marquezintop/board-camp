@@ -30,10 +30,6 @@ export async function getCustomer(req, res) {
 
 export async function insertNewCustomer(req, res){
     const { name, cpf, birthday, phone } = req.body;
-
-    const birthdayDate = new Date(birthday);
-    const birthdayString = birthdayDate.toISOString().substring(0, 10);
-
     try{
         const cpfExists = await db.query(`SELECT * FROM customers WHERE cpf=$1`
         , [cpf]);
@@ -41,7 +37,7 @@ export async function insertNewCustomer(req, res){
 
         await db.query(`INSERT INTO customers (name, phone, cpf, birthday) 
                         VALUES ($1, $2, $3, $4)`
-        , [  name, cpf, birthdayString, phone ]);
+        , [  name, cpf, birthday, phone ]);
 
         res.sendStatus(201);
     }catch(err){
