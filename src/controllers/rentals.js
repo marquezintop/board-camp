@@ -52,15 +52,14 @@ export async function postRentals(req, res) {
     const rentDate = new Date().toISOString().substring(0, 10);
     const originalPrice = daysRented * game.rows[0].pricePerDay;
 
-    if (daysRented <= 0) return res.status(400).send("Invalid daysRented");
-
     await db.query(
       'INSERT INTO rentals ("customerId","gameId", "rentDate", "daysRented", "returnDate", "originalPrice", "delayFee") VALUES ($1, $2, $3, $4, $5, $6, $7)',
       [customerId, gameId, rentDate, daysRented, null, originalPrice, null]
     );
 
-    res.sendStatus(201);
+    return res.sendStatus(201);
   } catch (err) {
-    res.status(500).send(err);
+    console.log(err)
+    return res.sendStatus(500)
   }
 }

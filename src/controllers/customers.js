@@ -29,15 +29,17 @@ export async function getCustomer(req, res) {
 }
 
 export async function insertNewCustomer(req, res){
-    const { name, cpf, birthday, phone } = req.body;
+    const { name, phone, cpf, birthday } = req.body;
     try{
         const cpfExists = await db.query(`SELECT * FROM customers WHERE cpf=$1`
         , [cpf]);
         if(cpfExists.rowCount) return res.sendStatus(409);
 
-        await db.query(`INSERT INTO customers (name, phone, cpf, birthday) 
-                        VALUES ($1, $2, $3, $4)`
-        , [  name, cpf, birthday, phone ]);
+        await db.query(
+            "INSERT INTO customers (name, phone, cpf, birthday) VALUES ($1, $2, $3, $4)",
+            [name, phone, cpf, birthday]
+          );
+          res.sendStatus(201);
 
         res.sendStatus(201);
     }catch(err){
