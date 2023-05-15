@@ -1,7 +1,6 @@
 import { db } from "../database/db.js";
 
 export async function getCustomersList(req, res) {
-    const queryCPF = req.query.cpf;
 
     try{
         const customers = await db.query(`SELECT * FROM customers`);

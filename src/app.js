@@ -10,6 +10,8 @@ server.use(json())
 
 server.use(router)
 
-server.listen(process.env.PORT, () => {
-    console.log(`Listening on ${process.env.PORT}`)
+const port = process.env.PORT || 5000
+
+server.listen(port, () => {
+    console.log(`Listening on ${port}`)
 })
