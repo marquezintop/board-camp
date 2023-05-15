@@ -1,11 +1,10 @@
 import { db } from "../database/db.js";
 
 export async function getCustomersList(req, res) {
-
     try{
         const customers = await db.query(`SELECT * FROM customers`);
 
-        return res.sen(customers);
+        return res.send(customers);
     } catch (err) {
         console.log(err)
         return res.sendStatus(500)
