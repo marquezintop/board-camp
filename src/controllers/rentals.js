@@ -1,4 +1,4 @@
-import { db } from "../database/database.connection.js";
+import { db } from "../database/db.js";
 
 export async function getRentals(req, res) {
 
@@ -32,7 +32,7 @@ export async function getRentals(req, res) {
   }
 }
 
-export async function postRentals(req, res) {
+export async function insertRental(req, res) {
   try {
     const { customerId, gameId, daysRented } = req.body;
 
