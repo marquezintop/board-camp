@@ -1,19 +1,18 @@
 import { db } from "../database/db.js";
 
-export async function getGames(req, res){
+export async function getGames(req, res) {
 
     try {
         const games = await db.query("SELECT * FROM games");
 
         return res.send(games.rows);
-
-    }catch(err){
+    } catch (err) {
         console.log(err)
-        res.sendStatus(500)
+        return res.sendStatus(500)
     }
 }
 
-export async function insertNewGame(req, res){
+export async function insertNewGame(req, res) {
     const { name, image, stockTotal, pricePerDay } = req.body;
 
     try {
@@ -22,13 +21,13 @@ export async function insertNewGame(req, res){
             VALUES ($1, $2, $3, $4)
         `, [name, image, stockTotal, pricePerDay]);
 
-        // const nameExist = await db.query(`SELECT * FROM games WHERE name=$1`
-        // , [name]);
-        // if(nameExist.row.length) return res.sendStatus(409);
+        const nameExist = await db.query(`SELECT * FROM games WHERE name=$1`
+        , [name]);
+        if(nameExist.rowCount) return res.sendStatus(409);
 
-        res.status(201).json({ games: game.rows });
-    }catch(err){
+        return res.status(201).json({ games: game.rows });
+    } catch (err) {
         console.log(err)
-        res.sendStatus(500)
+        return res.sendStatus(500)
     }
 }
