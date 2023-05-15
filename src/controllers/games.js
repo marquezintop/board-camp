@@ -1,13 +1,10 @@
-import { db } from "../db.js";
+import { db } from "../database/db.js";
 
 export async function getGames(req, res){
 
-    try{
-        const games = await db.query(`
-            SELECT g.*, c.name AS "categoryName" 
-                FROM games AS g JOIN categories AS c
-                    ON g."categoryId"=c.id
-        `);
+    try {
+        const games = await db.query("SELECT * FROM games");
+
         return res.send(games.rows);
 
     }catch(err){
@@ -20,12 +17,16 @@ export async function insertNewGame(req, res){
     const { name, image, stockTotal, pricePerDay } = req.body;
 
     try {
-        const games = await db.query(`
+        const game = await db.query(`
             INSERT INTO games (name, image, "stockTotal", "pricePerDay") 
             VALUES ($1, $2, $3, $4)
         `, [name, image, stockTotal, pricePerDay]);
 
-        res.status(201).json({ games: games.rows });
+        const name = await db.query(`SELECT * FROM games WHERE name=$1`
+        , [name]);
+        if(name.row.length) return res.sendStatus(409);
+
+        res.status(201).json({ games: game.rows });
     }catch(err){
         console.log(err)
         res.sendStatus(500)
